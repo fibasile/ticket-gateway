@@ -1,8 +1,10 @@
 import logging
 import os
 
-DEBUG = os.getenv('ENVIRONEMENT') == 'DEV'
-APPLICATION_ROOT = os.getenv('APPLICATION_APPLICATION_ROOT', '/application')
+DEBUG = os.getenv('ENVIRONMENT') == 'DEV'
+# print('DEBUG=%s' % DEBUG and 'true' or 'false')
+
+APPLICATION_ROOT = os.getenv('APPLICATION_APPLICATION_ROOT', '/api')
 HOST = os.getenv('APPLICATION_HOST')
 PORT = int(os.getenv('APPLICATION_PORT', '3000'))
 

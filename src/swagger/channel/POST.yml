@@ -1,0 +1,30 @@
+Create an channel based on the sent information
+---
+tags:
+  - channel
+parameters:
+  - name: slug
+    in: path
+    type: string
+    description: the slug for this channel
+  - name: body
+    in: body
+    schema:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title for this channel
+        path:
+          type: string
+          description: The path of this channel on the hosting platform
+responses:
+  200:
+    description: The channel was successfully created
+    schema:
+      example:
+        data:
+          slug: some-channel
+          title: Some channel
+          path: /some/path
+

@@ -1,0 +1,18 @@
+Return an channel key information based on his channel_slug
+---
+tags:
+  - channel
+parameters:
+  - name: channel_slug
+    in: path
+    type: string
+    description: the slug for this channel
+responses:
+  200:
+    description: The channels's information were successfully retrieved
+    schema:
+      example:
+        data:
+          slug: some-channel
+          title: Some channel
+          path: /some/path

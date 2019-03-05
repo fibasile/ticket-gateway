@@ -6,6 +6,7 @@ import config
 from models import db
 import routes
 
+
 # config your API specs
 # you can define multiple specs in the case your api has multiple versions
 # ommit configs to get the default (all views exposed in /spec url)
@@ -20,16 +21,16 @@ server.config['SWAGGER'] = {
     "specs": [
         {
             "version": "0.0.1",
-            "title": "Application",
+            "title": "Ticket Manager",
             "endpoint": 'spec',
-            "route": '/application/spec',
+            "route": '/api/spec',
             "rule_filter": lambda rule: True  # all in
         }
     ],
-    "static_url_path": "/application/apidocs"
+    "static_url_path": "/apidocs"
 }
 
-Swagger(server)
+swagger = Swagger(server)
 
 server.debug = config.DEBUG
 server.config['SQLALCHEMY_DATABASE_URI'] = config.DB_URI
