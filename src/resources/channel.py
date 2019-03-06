@@ -1,12 +1,11 @@
 """
-Define the REST verbs relative to the users
+Define the REST verbs relative to the channels
 """
 
 from flasgger import swag_from
 from flask_restful import Resource
 from flask_restful.reqparse import Argument
 from flask.json import jsonify
-
 from repositories import ChannelRepository
 from util import parse_params
 
@@ -44,5 +43,8 @@ class ChannelResource(Resource):
             title=title,
             path=path
         )
-        return jsonify({'data': channel.json})
+        r = jsonify({'data': channel.json})
+        r.status_code = 201
+        return r
+
  

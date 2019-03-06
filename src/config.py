@@ -1,5 +1,6 @@
 import logging
 import os
+from repositories import GitlabProvider 
 
 DEBUG = os.getenv('ENVIRONMENT') == 'DEV'
 # print('DEBUG=%s' % DEBUG and 'true' or 'false')
@@ -25,3 +26,6 @@ logging.basicConfig(
         pid:%(process)s module:%(module)s %(message)s',
     datefmt='%d/%m/%y %H:%M:%S',
 )
+
+
+trackerProvider = GitlabProvider

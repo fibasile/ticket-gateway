@@ -1,0 +1,24 @@
+Return a tracker key information based on his channel's slug
+---
+tags:
+  - tracker
+parameters:
+  - name: slug
+    in: path
+    type: string
+    description: the slug for this channel
+responses:
+  200:
+    description: The trackers's information were successfully retrieved
+    schema:
+      example:
+        data:
+          id: 4
+          name: Diaspora Client
+          description: some description
+          path_with_namespace: diaspora/diaspora-client
+          created_at: '2013-09-30T13:46:02Z'
+          last_activity_at: '2013-09-30T13:46:02Z'
+          avatar_url: http://example.com/uploads/project/avatar/4/uploads/avatar.png
+          web_url: http://example.com/diaspora/diaspora-client
+          star_count: 0

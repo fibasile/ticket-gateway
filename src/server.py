@@ -1,6 +1,7 @@
 from flask import Flask
 from flask.blueprints import Blueprint
 from flasgger import Swagger
+from flask_cors import CORS
 
 import config
 from models import db
@@ -14,6 +15,7 @@ import routes
 #   returns a boolean to filter in only desired views
 
 server = Flask(__name__)
+CORS(server)
 
 server.config['SWAGGER'] = {
     "swagger_version": "2.0",

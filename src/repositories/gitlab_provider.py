@@ -1,8 +1,10 @@
 from .provider import TicketProvider
 import gitlab
-import config
+import os
+GITLAB_URL = os.getenv('GITLAB_URL', 'https://gitlab.fabcloud.org')
+GITLAB_TOKEN = os.getenv('GITLAB_TOKEN')
 
-git = gitlab.gitlab(config.GITLAB_URL, config.GITLAB_TOKEN)
+git = gitlab.Gitlab(GITLAB_URL, GITLAB_TOKEN)
 
 class GitlabProvider(TicketProvider):
 
@@ -62,7 +64,7 @@ class GitlabProvider(TicketProvider):
     @staticmethod
     def getUserByExternalId(provider, external_id):
         """ Get a user by external_id """
-        user = git.users.list(extern_uid=external_id, provider=provider)[0]
+        user = git.users.list(query_parameters={"extern_uid":external_id, "provider": provider})[0]
         return user
 
     @staticmethod

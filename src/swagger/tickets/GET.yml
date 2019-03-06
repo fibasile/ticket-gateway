@@ -1,0 +1,35 @@
+Return all ticket key information based on his channel's slug
+---
+tags:
+  - tracker
+parameters:
+  - name: slug
+    in: path
+    type: string
+    description: the slug for this channel
+responses:
+  200:
+    description: All ticket's information were successfully retrieved
+    schema:
+      example:
+        data:
+          - id: 76
+            iid: 6
+            title: Consequatur vero maxime deserunt laboriosam est voluptas dolorem.
+            state: opened
+            description: Ratione dolores corrupti mollitia soluta quia
+            author:
+              name: Alexandra Bashirian
+              username: eileen.lowe
+              id: 18
+              avatar_url: ""
+            assignees:
+              - name: Administrator
+                username: root
+                id: 1
+                avatar_url: ""
+            updated_at: "2016-01-04T15:31:51.081Z"
+            closed_at: null
+            closed_by: null
+            due_date: "2016-07-22"
+            web_url: "http://example.com/example/example/issues/6"
