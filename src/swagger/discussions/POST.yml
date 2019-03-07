@@ -13,6 +13,10 @@ parameters:
     type: string
     required: true
     description: the id for this ticket
+  - name: user_id
+    type: string
+    required: true
+    description: the id of the user creating the comment
   - name: body
     in: body
     type: string

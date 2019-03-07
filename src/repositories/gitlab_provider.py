@@ -4,7 +4,12 @@ import os
 GITLAB_URL = os.getenv('GITLAB_URL', 'https://gitlab.fabcloud.org')
 GITLAB_TOKEN = os.getenv('GITLAB_TOKEN')
 
-git = gitlab.Gitlab(GITLAB_URL, GITLAB_TOKEN)
+
+def gitClient(sudo=None):
+    git = gitlab.Gitlab(GITLAB_URL, GITLAB_TOKEN)
+    if sudo:
+        git.headers['Sudo'] = sudo
+    return git
 
 
 class GitlabProvider(TicketProvider):
@@ -12,6 +17,7 @@ class GitlabProvider(TicketProvider):
     @classmethod
     def getTracker(cls, project_path):
         """ Get the details from the issue tracker at path """
+        git = gitClient()
         project = git.projects.get(project_path)
         return project
 
@@ -53,19 +59,28 @@ class GitlabProvider(TicketProvider):
         return issue.notes.list(all=True)
 
     @classmethod
-    def addTicketDiscussion(cls, project_path, ticket_id, user_id, body):
+    def addTicketDiscussion(cls, project_path, ticket_id,  discussion_id,  user_id, body):
         """ Add a new comment to the ticket """
-        tracker = cls.getTrakcer(project_path)
+        tracker = cls.getTracker(project_path)
         issue = tracker.issues.get(ticket_id)
-        # TODO Do as user
-        git.headers['Sudo'] = user_id
+        discussion = issue.discussions.get(discussion_id)
+        note = discussion.notes.create({body: body})
+        return note
+
+    @classmethod
+    def createTicketDiscussion(cls, project_path, ticket_id, user_id, body):
+        """ Add a new comment to the ticket """
+        git = gitClient(user_id)
+        tracker = cls.getTracker(project_path)
+        issue = tracker.issues.get(ticket_id)
+        # todo create as user
         note = issue.notes.create({body: body})
-        del git.headers['Sudo']
         return note
 
     @classmethod
     def getUserByExternalId(cls, provider, external_id):
         """ Get a user by external_id """
+        git = gitClient()
         user = git.users.list(
             query_parameters={
                 "extern_uid": external_id,
@@ -76,6 +91,7 @@ class GitlabProvider(TicketProvider):
     @classmethod
     def getUserByEmail(cls, email):
         """ Get a user by email """
+        git = gitClient()
         user = git.users.list(email=email)[0]
         return user
 
@@ -92,7 +108,7 @@ class GitlabProvider(TicketProvider):
         tracker = cls.getTracker(project_path)
         from_user = cls.getUser(from_user)
         to_user = cls.getUser(to_user)
-        git.headers['Sudo'] = from_user.id
-        ticket = tracker.issues.create({"title": subject, "description": body})
-        del git.headers['Sudo']
+        git = gitClient(from_user.id)
+        ticket = tracker.issues.create(
+            {"title": subject, "description": body})
         return ticket
