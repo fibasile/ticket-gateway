@@ -1,3 +1,3 @@
 # from .user import UserRepository
 from .channel import ChannelRepository
-from .gitlab_provider import GitlabProvider
+from .gitlab_provider import GitlabProvider, gitClient
