@@ -1,20 +1,23 @@
 Add a member to a channel based on the sent information
 ---
 tags:
-  - member
+  - members
 parameters:
   - name: slug
     in: path
     type: string
     description: the channel slug
   - name: data
-    in: data
+    in: body
     schema:
       type: object
       properties:
         user_id:
           type: string
           description: The user's id
+        level:
+          type: string
+          description: The user's access level
 responses:
   201:
     description: The user was successfully added to the channel
