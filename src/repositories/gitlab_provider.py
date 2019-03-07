@@ -6,9 +6,11 @@ GITLAB_TOKEN = os.getenv('GITLAB_TOKEN')
 
 
 def gitClient(sudo=None):
-    git = gitlab.Gitlab(GITLAB_URL, GITLAB_TOKEN)
+
+    git = gitlab.Gitlab(GITLAB_URL, GITLAB_TOKEN, api_version=4)
     if sudo:
-        git.headers['Sudo'] = sudo
+        git.headers['Sudo'] = str(sudo)
+    git.auth()
     return git
 
 
@@ -25,7 +27,7 @@ class GitlabProvider(TicketProvider):
     def getMembers(cls, project_path):
         """ Get the members associated to the project at path """
         project = cls.getTracker(project_path)
-        return project.members.all(all=True)
+        return project.members.list(all=True)
 
     @classmethod
     def addMember(cls, project_path, user_id, level):

@@ -1,6 +1,6 @@
 import logging
 import os
-from repositories import GitlabProvider 
+from repositories import GitlabProvider
 
 DEBUG = os.getenv('ENVIRONMENT') == 'DEV'
 # print('DEBUG=%s' % DEBUG and 'true' or 'false')

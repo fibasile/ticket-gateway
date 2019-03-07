@@ -1,0 +1,4 @@
+channels:
+  - slug: fablabs-approval
+    path: "fablabs/approval"
+    title: "FabLabs.io Lab approval"
