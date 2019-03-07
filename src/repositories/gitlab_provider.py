@@ -40,6 +40,14 @@ class GitlabProvider(TicketProvider):
         return member
 
     @classmethod
+    def removeMember(cls, project_path, user_id):
+        """ Remove a member from the tracker """
+        tracker = cls.getTracker(project_path)
+        member = tracker.members.get(user_id)
+        member.delete()
+        return None
+
+    @classmethod
     def getTickets(cls, project_path):
         """ Get all the tickets from a given project path """
         tracker = cls.getTracker(project_path)
@@ -91,10 +99,10 @@ class GitlabProvider(TicketProvider):
         return user
 
     @classmethod
-    def getUserByEmail(cls, email):
+    def getUserByUsername(cls, username):
         """ Get a user by email """
         git = gitClient()
-        user = git.users.list(email=email)[0]
+        user = git.users.list(username=username)[0]
         return user
 
     @classmethod
