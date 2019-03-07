@@ -106,6 +106,13 @@ class GitlabProvider(TicketProvider):
         return user
 
     @classmethod
+    def getUserById(cls, user_id):
+        """ Get a user by id """
+        git = gitClient()
+        user = git.users.get(user_id)
+        return user
+
+    @classmethod
     def createTicket(cls,
                      project_path,
                      from_user,
@@ -116,9 +123,17 @@ class GitlabProvider(TicketProvider):
                      ):
         """ Create a ticket on the given project path """
         tracker = cls.getTracker(project_path)
-        from_user = cls.getUser(from_user)
-        to_user = cls.getUser(to_user)
+        from_user = cls.getUserById(from_user)
         git = gitClient(from_user.id)
-        ticket = tracker.issues.create(
+        project = git.projects.get(tracker.id)
+        ticket = project.issues.create(
             {"title": subject, "description": body})
         return ticket
+
+    @classmethod
+    def removeTicket(cls,
+                     project_path, ticket_id):
+        """ Remove a ticket at the given project path """
+        tracker = cls.getTracker(project_path)
+        issue = tracker.issues.get(ticket_id)
+        issue.delete()

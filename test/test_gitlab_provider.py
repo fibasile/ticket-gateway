@@ -95,4 +95,21 @@ class TestGitlabProvider(unittest.TestCase):
 
     def testCreateIssue(self):
         """Calling createTicket"""
-        pass
+        c = ChannelRepository.get('fablabs-approval')
+        ticket = GitlabProvider.createTicket(
+            c.path, self.bot.id, self.friend.id,
+            "[NEW LAB] This lab was submitted",
+            "More than you want to know ever about this lab")
+        self.assertIsNotNone(ticket)
+        self.assertIsNotNone(ticket.id)
+        self.assertEquals(ticket.title, "[NEW LAB] This lab was submitted")
+        found = False
+        tickets = GitlabProvider.getTickets(c.path)
+        self.assertGreater(
+            len([aticket for aticket in tickets if aticket.id == ticket.id]), 0)
+        GitlabProvider.removeTicket(
+            c.path, ticket.iid
+        )
+        tickets = GitlabProvider.getTickets(c.path)
+        self.assertEqual(
+            len([aticket for aticket in tickets if aticket.id == ticket.id]), 0)

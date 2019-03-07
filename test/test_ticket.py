@@ -7,6 +7,7 @@ from models import Channel
 from repositories import ChannelRepository, GitlabProvider
 from unittest.mock import MagicMock, Mock
 
+
 class TestTracker(unittest.TestCase):
 
     @classmethod
@@ -15,7 +16,8 @@ class TestTracker(unittest.TestCase):
 
     def setUp(self):
         db.create_all()
-        ChannelRepository.create(slug='a-channel', title='test channel', path='/dummy/path')
+        ChannelRepository.create(
+            slug='a-channel', title='test channel', path='/dummy/path')
         GitlabProvider.getTracker = MagicMock(name="getTracker")
         GitlabProvider.getTracker.return_value = {
             "title": "Some title",
@@ -32,13 +34,13 @@ class TestTracker(unittest.TestCase):
         db.drop_all()
 
     def test_get(self):
-        """ The GET on `/application/channel` should return a channel """      
+        """ The GET on `/application/channel` should return a channel """
         response = self.client.get('/api/channel/a-channel/tickets/3243')
         self.assertEqual(response.status_code, 200)
-        GitlabProvider.getTracker.assert_called_with('/dummy/path') 
-        GitlabProvider.getTicket.assert_called_with('/dummy/path', '3243') 
+        GitlabProvider.getTracker.assert_called_with('/dummy/path')
+        GitlabProvider.getTicket.assert_called_with('/dummy/path', '3243')
         response_json = json.loads(response.data.decode('utf-8'))
         self.assertEqual(
             response_json,
-            {'data': {   "id": "3243",'title': 'Issue title'}}
+            {'data': {"id": "3243", 'title': 'Issue title'}}
         )
