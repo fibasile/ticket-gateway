@@ -9,6 +9,9 @@ start:
 coverage:
 	docker-compose run --rm testserver bash -c "python -m pytest --cov-report term --cov-report html:coverage --cov-config setup.cfg --cov=src/ test/"
 
+showcoverage:
+	google-chrome "coverage/index.html"
+
 daemon:
 	docker-compose up -d server
 

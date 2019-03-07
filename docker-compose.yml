@@ -36,7 +36,7 @@ services:
     environment:
       APPLICATION_PORT: 5053
       APPLICATION_DB_CONTAINER: testdb
-    command: python -m pytest test/
+    command: python -m pytest --tb=auto -l test/
 
   testdb:
     image: postgres:9.4
