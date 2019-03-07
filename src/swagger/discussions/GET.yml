@@ -1,0 +1,40 @@
+Return an channel members based on his channel_slug
+---
+tags:
+  - tracker
+parameters:
+  - name: slug
+    in: path
+    type: string
+    description: the slug for this channel
+  - name: ticket_id
+    in: path
+    type: string
+    description: the id for this ticket
+responses:
+  200:
+    description: The discussions associated to the ticket were successfully retrieved
+    schema:
+      example:
+        data:
+          - individual_note: true
+            id: 43243
+            notes:
+              - body: Some text
+                author:
+                  user_id: 432
+                  username: someuser
+                  avatar_url: ""
+          - individual_note: true
+            id: 43244
+            notes:
+              - body: Some text
+                author:
+                  user_id: 432
+                  username: someuser
+                  avatar_url: ""
+
+  404:
+    description: Not Found
+  400:
+    description: Bad Request

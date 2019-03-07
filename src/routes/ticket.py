@@ -4,7 +4,7 @@ Defines the blueprint for the users
 from flask import Blueprint
 from flask_restful import Api
 from util import API_ERRORS
-from resources import TicketResource, TicketsResource
+from resources import TicketResource, TicketsResource, DiscussionsResource
 
 
 TICKET_BLUEPRINT = Blueprint('ticket', __name__)
@@ -18,4 +18,10 @@ api.add_resource(
 api.add_resource(
     TicketsResource,
     '/channel/<string:slug>/tickets'
+)
+
+
+api.add_resource(
+    DiscussionsResource,
+    '/channel/<string:slug>/tickets/<string:ticket_id>/discussions'
 )

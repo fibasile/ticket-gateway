@@ -1,0 +1,51 @@
+Add a comment to or create a discussion on this channel issue
+---
+tags:
+  - tracker
+parameters:
+  - name: slug
+    in: path
+    type: string
+    required: true
+    description: the slug for this channel
+  - name: ticket_id
+    in: path
+    type: string
+    required: true
+    description: the id for this ticket
+  - name: body
+    in: body
+    type: string
+    required: true
+    description: the body for the comment
+  - name: discussion_id
+    in: body
+    type: string
+    description: optional discussion_id, in this case the comment is added to an existing discussion
+responses:
+  200:
+    description: The discussions associated to the ticket were successfully retrieved
+    schema:
+      example:
+        data:
+          - individual_note: true
+            id: 43243
+            notes:
+              - body: Some text
+                author:
+                  user_id: 432
+                  username: someuser
+                  avatar_url: ""
+          - individual_note: true
+            id: 43244
+            notes:
+              - body: Some text
+                author:
+                  user_id: 432
+                  username: someuser
+                  avatar_url: ""
+
+  404:
+    description: Not Found
+  400:
+    description: Bad Request
