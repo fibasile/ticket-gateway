@@ -1,0 +1,23 @@
+Return an channel members based on his channel_slug
+---
+tags:
+  - members
+parameters:
+  - name: slug
+    in: path
+    type: string
+    description: the slug for this channel
+responses:
+  200:
+    description: The channels's information were successfully retrieved
+    schema:
+      example:
+        data:
+          - username: username
+            id: 43243
+            email: email@sample.com
+            avatar_url: "https://some_url"
+  404:
+    description: Not Found
+  400:
+    description: Bad Request

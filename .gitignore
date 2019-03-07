@@ -8,3 +8,5 @@ vendor/
 .vscode
 .coverage
 coverage/
+.pytest_cache/
+*.disable

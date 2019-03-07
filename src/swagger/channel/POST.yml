@@ -19,7 +19,7 @@ parameters:
           type: string
           description: The path of this channel on the hosting platform
 responses:
-  200:
+  201:
     description: The channel was successfully created
     schema:
       example:
@@ -27,4 +27,5 @@ responses:
           slug: some-channel
           title: Some channel
           path: /some/path
-
+  400:
+    description: Bad Request

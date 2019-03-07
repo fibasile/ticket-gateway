@@ -1,3 +1,5 @@
+from flask.json import jsonify
+
 class ApiError(Exception):
     def __init__(self, message, payload=None, status_code=400):
         Exception.__init__(self)

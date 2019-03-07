@@ -43,6 +43,31 @@ class TestChannel(unittest.TestCase):
         response = self.client.get('/api/channel/unknown-channel')
         self.assertEqual(response.status_code, 404)
 
+
+    def test_empty_slug(self):
+        """The GET on `/api/channel` should handle bad requests"""
+        channel = ChannelRepository.create(
+            slug='a-channel',
+            title='test channel',
+            path='/dummy/path')
+        response = self.client.get('/api/channel')
+        self.assertEqual(response.status_code, 404)
+
+    def test_duplicate(self):
+        """The POST on `/api/channel` should not accept an existing slug"""
+        channel = ChannelRepository.create(
+            slug='a-channel',
+            title='test channel',
+            path='/dummy/path')
+        response = self.client.post('/api/channel/a-channel', json={
+                'title': 'Some channel',
+                'path': '/dummy/path'
+        })
+        self.assertEqual(response.status_code, 400)
+        
+        
+
+
     def test_post(self):
         """The POST on `/api/channel` should create a channel"""
         response = self.client.post('/api/channel/another-channel', json={

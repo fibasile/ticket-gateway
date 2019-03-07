@@ -37,3 +37,5 @@ responses:
           closed_by: null
           due_date: "2016-07-22"
           web_url: "http://example.com/example/example/issues/6"
+  404:
+    description: Not Found

@@ -15,12 +15,13 @@ class ChannelRepository:
             ).one()
         except exc.NoResultFound:
             abort(404)
-        except exc.MultipleResultsFound:
-            abort(404)
+
 
     @staticmethod
     def create(slug, title, path):
         """ Create a new channel """
         channel = Channel(slug, title, path)
-        return channel.save()
-
+        try:
+            return channel.save()
+        except Exception as ex:
+            abort(400)

@@ -3,7 +3,7 @@ Return an channel key information based on his channel_slug
 tags:
   - channel
 parameters:
-  - name: channel_slug
+  - name: slug
     in: path
     type: string
     description: the slug for this channel
