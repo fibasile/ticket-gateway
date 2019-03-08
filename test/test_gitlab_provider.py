@@ -6,6 +6,8 @@ from repositories import ChannelRepository
 # from unittest.mock import MagicMock, Mock
 from repositories import GitlabProvider, gitClient
 import os
+import pytest
+
 # from importlib import reload
 # uncomment below to run the git test
 # this will work if you create two users and the
@@ -16,6 +18,7 @@ import os
 # tickettester
 
 
+@pytest.mark.slow
 class TestGitlabProvider(unittest.TestCase):
 
     @classmethod

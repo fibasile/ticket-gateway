@@ -16,3 +16,4 @@ SQLAlchemy==1.1.3
 Werkzeug==0.14.1
 python-gitlab
 flask-cors
+flask-jwt-extended

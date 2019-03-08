@@ -7,6 +7,8 @@ import config
 from models import db
 import routes
 
+from flask_jwt_extended import JWTManager
+
 
 # config your API specs
 # you can define multiple specs in the case your api has multiple versions
@@ -31,6 +33,12 @@ server.config['SWAGGER'] = {
     ],
     "static_url_path": "/apidocs"
 }
+
+
+# Init JWT
+server.config['JWT_SECRET_KEY'] = config.JWT_SECRET_KEY  # Change this!
+jwt = JWTManager(server)
+
 
 swagger = Swagger(server)
 

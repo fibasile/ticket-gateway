@@ -3,6 +3,7 @@ from util import ApiError
 from sqlalchemy.orm import exc
 from werkzeug.exceptions import abort
 
+
 class ChannelRepository:
     """ The repository for the channel model """
 
@@ -15,7 +16,6 @@ class ChannelRepository:
             ).one()
         except exc.NoResultFound:
             abort(404)
-
 
     @staticmethod
     def create(slug, title, path):

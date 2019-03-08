@@ -4,7 +4,7 @@ from repositories import GitlabProvider
 
 DEBUG = os.getenv('ENVIRONMENT') == 'DEV'
 # print('DEBUG=%s' % DEBUG and 'true' or 'false')
-
+JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
 APPLICATION_ROOT = os.getenv('APPLICATION_APPLICATION_ROOT', '/api')
 HOST = os.getenv('APPLICATION_HOST')
 PORT = int(os.getenv('APPLICATION_PORT', '3000'))

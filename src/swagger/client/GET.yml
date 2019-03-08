@@ -1,0 +1,19 @@
+Return an client key information based on his slug
+---
+tags:
+  - client
+parameters:
+  - name: slug
+    in: path
+    type: string
+    description: the slug for this client
+responses:
+  200:
+    description: The client's information were successfully retrieved
+    schema:
+      example:
+        data:
+          slug: some-client
+          title: Some client
+          client_id: "<the client id for this client>"
+          client_secret: "<the client id for this client>"

@@ -1,0 +1,25 @@
+Create an client based on the sent information
+---
+tags:
+  - client
+parameters:
+  - name: slug
+    in: path
+    type: string
+    description: the slug for this client
+  - name: title
+    in: body
+    type: string
+    description: the title for this client
+responses:
+  201:
+    description: The client was successfully created
+    schema:
+      example:
+        data:
+          slug: some-client
+          title: Some client
+          client_id: "<the client id for this client>"
+          client_secret: "<the client id for this client>"
+  400:
+    description: Bad Request

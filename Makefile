@@ -15,8 +15,15 @@ showcoverage:
 daemon:
 	docker-compose up -d server
 
+# test only @pytest.mark.current
+check:
+	docker-compose run --rm testserver bash -c "python -m pytest --tb=auto -l -m \"current\" test/"
+
 test:
-	docker-compose run --rm testserver
+	docker-compose run --rm testserver bash -c "python -m pytest --tb=auto -l -m \"not slow\" test/"
+
+test/slow:
+	docker-compose run --rm testserver bash -c "python -m pytest --tb=auto -l test/"
 
 lint:
 	docker-compose run --rm server bash -c "python -m flake8 ./src ./test"

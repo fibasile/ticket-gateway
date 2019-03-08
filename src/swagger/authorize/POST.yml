@@ -1,0 +1,23 @@
+Create an channel based on the sent information
+---
+tags:
+  - jwt
+parameters:
+  - name: client_id
+    in: body
+    type: string
+    description: the client_id for this app
+  - name: client_secret
+    in: body
+    type: string
+    description: the client_secret for this app
+responses:
+  200:
+    description: The jwt token has been successfully created
+    schema:
+      example:
+        jwt: "<the jwt token>"
+  400:
+    description: Bad Request
+  404:
+    description: Not found
