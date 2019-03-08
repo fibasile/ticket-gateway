@@ -17,9 +17,9 @@ def gitClient(sudo=None):
 class GitlabProvider(TicketProvider):
 
     @classmethod
-    def getTracker(cls, project_path):
+    def getTracker(cls, project_path, sudo=None):
         """ Get the details from the issue tracker at path """
-        git = gitClient()
+        git = gitClient(sudo)
         project = git.projects.get(project_path)
         return project
 
@@ -33,8 +33,10 @@ class GitlabProvider(TicketProvider):
     def addMember(cls, project_path, user_id, level):
         """ Add a member to a tracker"""
         tracker = cls.getTracker(project_path)
-        levels = {'developer': gitlab.DEVELOPER_ACCESS,
-                  'master': gitlab.MASTER_ACCESS}
+        levels = {
+            'developer': gitlab.DEVELOPER_ACCESS,
+            'master': gitlab.MASTER_ACCESS
+        }
         member = tracker.members.create(
             {'user_id': user_id, 'access_level': levels[level]})
         return member
@@ -71,8 +73,7 @@ class GitlabProvider(TicketProvider):
     @classmethod
     def addTicketDiscussion(cls, project_path, ticket_id,  discussion_id,  user_id, body):
         """ Add a new comment to the ticket """
-        git = gitClient(user_id)
-        tracker = git.projects.get(project_path)
+        tracker = cls.getTracker(project_path, user_id)
         issue = tracker.issues.get(ticket_id)
         discussion = issue.discussions.get(discussion_id)
         note = discussion.notes.create({"body": body})
@@ -81,8 +82,7 @@ class GitlabProvider(TicketProvider):
     @classmethod
     def createTicketDiscussion(cls, project_path, ticket_id, user_id, body):
         """ Add a new comment to the ticket """
-        git = gitClient(user_id)
-        tracker = git.projects.get(project_path)
+        tracker = cls.getTracker(project_path, user_id)
         issue = tracker.issues.get(ticket_id)
         discussion = issue.discussions.create({"body": body})
         return discussion
@@ -122,12 +122,11 @@ class GitlabProvider(TicketProvider):
                      labels=[]
                      ):
         """ Create a ticket on the given project path """
-        tracker = cls.getTracker(project_path)
-        from_user = cls.getUserById(from_user)
-        git = gitClient(from_user.id)
-        project = git.projects.get(tracker.id)
-        ticket = project.issues.create(
+        tracker = cls.getTracker(project_path, from_user)
+
+        ticket = tracker.issues.create(
             {"title": subject, "description": body})
+
         return ticket
 
     @classmethod
@@ -161,15 +160,13 @@ class GitlabProvider(TicketProvider):
         cls, project_path, ticket_id, user_id
     ):
         """Subscribe a user to the ticket """
-        git = gitClient(user_id)
-        tracker = git.projects.get(project_path)
+        tracker = cls.getTracker(project_path, user_id)
         issue = tracker.issues.get(ticket_id)
         issue.subscribe()
 
     @classmethod
     def unsubscribeTicket(cls, project_path, ticket_id, user_id):
         """Unsubscribe a user from the ticket"""
-        git = gitClient(user_id)
-        tracker = git.projects.get(project_path)
+        tracker = cls.getTracker(project_path, user_id)
         issue = tracker.issues.get(ticket_id)
         issue.unsubscribe()

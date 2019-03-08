@@ -170,3 +170,19 @@ class TestGitlabProvider(unittest.TestCase):
     def testUnsubscribe(self):
         """calling unsubscribeTicket removes the user from the issue watchers"""
         pass
+
+    def testGetUserById(self):
+        """calling getuserbyid should return an user by its id"""
+        user = GitlabProvider.getUserById(self.bot.id)
+        self.assertEquals(user.id, self.bot.id)
+        self.assertEquals(user.username, self.bot.username)
+
+    def testGetUserByExternalId(self):
+        """calling getUserByExternalId should return a user"""
+        user = GitlabProvider.getUserByUsername("fibasile")
+        identity = user.attributes["identities"][0]
+        self.assertIsNotNone(identity)
+        byExtId = GitlabProvider.getUserByExternalId(
+            identity["provider"], identity["extern_uid"])
+        self.assertEquals(user.id, byExtId.id)
+        self.assertEquals(user.attributes, byExtId.attributes)
