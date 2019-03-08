@@ -71,21 +71,21 @@ class GitlabProvider(TicketProvider):
     @classmethod
     def addTicketDiscussion(cls, project_path, ticket_id,  discussion_id,  user_id, body):
         """ Add a new comment to the ticket """
-        tracker = cls.getTracker(project_path)
+        git = gitClient(user_id)
+        tracker = git.projects.get(project_path)
         issue = tracker.issues.get(ticket_id)
         discussion = issue.discussions.get(discussion_id)
-        note = discussion.notes.create({body: body})
+        note = discussion.notes.create({"body": body})
         return note
 
     @classmethod
     def createTicketDiscussion(cls, project_path, ticket_id, user_id, body):
         """ Add a new comment to the ticket """
         git = gitClient(user_id)
-        tracker = cls.getTracker(project_path)
+        tracker = git.projects.get(project_path)
         issue = tracker.issues.get(ticket_id)
-        # todo create as user
-        note = issue.notes.create({body: body})
-        return note
+        discussion = issue.discussions.create({"body": body})
+        return discussion
 
     @classmethod
     def getUserByExternalId(cls, provider, external_id):
@@ -137,3 +137,39 @@ class GitlabProvider(TicketProvider):
         tracker = cls.getTracker(project_path)
         issue = tracker.issues.get(ticket_id)
         issue.delete()
+
+    @classmethod
+    def closeTicket(cls,
+                    project_path, ticket_id):
+        """ Closes a ticket at a given project path """
+        tracker = cls.getTracker(project_path)
+        issue = tracker.issues.get(ticket_id)
+        issue.state_event = 'close'
+        issue.save()
+
+    @classmethod
+    def reopenTicket(cls,
+                     project_path, ticket_id):
+        """ Reopen a ticket at a given project path """
+        tracker = cls.getTracker(project_path)
+        issue = tracker.issues.get(ticket_id)
+        issue.state_event = 'reopen'
+        issue.save()
+
+    @classmethod
+    def subscribeTicket(
+        cls, project_path, ticket_id, user_id
+    ):
+        """Subscribe a user to the ticket """
+        git = gitClient(user_id)
+        tracker = git.projects.get(project_path)
+        issue = tracker.issues.get(ticket_id)
+        issue.subscribe()
+
+    @classmethod
+    def unsubscribeTicket(cls, project_path, ticket_id, user_id):
+        """Unsubscribe a user from the ticket"""
+        git = gitClient(user_id)
+        tracker = git.projects.get(project_path)
+        issue = tracker.issues.get(ticket_id)
+        issue.unsubscribe()

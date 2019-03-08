@@ -13,6 +13,9 @@ class TestDiscussions(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.client = server.test_client()
+        cls._getTicket = GitlabProvider.getTicket
+        cls._addTicketDiscussion = GitlabProvider.addTicketDiscussion
+        cls._createTicketDiscussion = GitlabProvider.createTicketDiscussion
 
     def setUp(self):
         db.create_all()
@@ -25,10 +28,13 @@ class TestDiscussions(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+        GitlabProvider.getTicket = TestDiscussions._getTicket
+        GitlabProvider.addTicketDiscussion = TestDiscussions._addTicketDiscussion
+        GitlabProvider.createTicketDiscussion = TestDiscussions._createTicketDiscussion
 
     def test_get(self):
         """The GET on `/api/channel/a-channel/tickets/ticket_id/discussions`"""
-        """should return a list of members """
+
         GitlabProvider.getTicket = MagicMock()
         GitlabProvider.getTicket.return_value = Mock(
             discussions=Mock(list=Mock(return_value=[

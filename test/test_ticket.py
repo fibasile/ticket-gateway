@@ -13,6 +13,8 @@ class TestTracker(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.client = server.test_client()
+        cls._getTracker = GitlabProvider.getTracker
+        cls._getTicket = GitlabProvider.getTicket
 
     def setUp(self):
         db.create_all()
@@ -32,6 +34,8 @@ class TestTracker(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+        GitlabProvider.getTracker = TestTracker._getTracker
+        GitlabProvider.getTicket = TestTracker._getTicket
 
     def test_get(self):
         """ The GET on `/application/channel` should return a channel """

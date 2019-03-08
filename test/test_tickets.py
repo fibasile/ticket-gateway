@@ -8,11 +8,13 @@ from repositories import ChannelRepository, GitlabProvider
 from unittest.mock import MagicMock, Mock
 
 
-class TestTracker(unittest.TestCase):
+class TestTickets(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         cls.client = server.test_client()
+        cls._getTracker = GitlabProvider.getTracker
+        cls._getTickets = GitlabProvider.getTickets
 
     def setUp(self):
         db.create_all()
@@ -32,6 +34,8 @@ class TestTracker(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+        GitlabProvider.getTracker = TestTickets._getTracker
+        GitlabProvider.getTicket = TestTickets._getTickets
 
     def test_get(self):
         """ The GET on `/application/channel/tickets` should return a list of tickets for the channel """

@@ -11,6 +11,8 @@ class TestMembers(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.client = server.test_client()
+        cls._getTracker = GitlabProvider.getTracker
+        cls._getMembers = GitlabProvider.getMembers
 
     def setUp(self):
         db.create_all()
@@ -30,6 +32,8 @@ class TestMembers(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+        GitlabProvider.getTracker = TestMembers._getTracker
+        GitlabProvider.getMembers = TestMembers._getMembers
 
     def test_get(self):
         """ The GET on `/api/channel/a-channel/members` should return a list of members """

@@ -3,10 +3,10 @@ import yaml
 from server import server
 from models.abc import db
 from repositories import ChannelRepository, GitlabProvider
-from unittest.mock import MagicMock, Mock
+# from unittest.mock import MagicMock, Mock
 from repositories import GitlabProvider, gitClient
 import os
-
+# from importlib import reload
 # uncomment below to run the git test
 # this will work if you create two users and the projects in the fixtures/channels.yml
 # users:
@@ -23,7 +23,6 @@ class TestGitlabProvider(unittest.TestCase):
 
     def setUp(self):
         db.create_all()
-
         self.bot = GitlabProvider.getUserByUsername('ticketbot')
         self.friend = GitlabProvider.getUserByUsername('ticketfriend')
         with open(os.path.join(os.getcwd(), 'test/fixtures/channels.yml'), 'r') as fixture:
@@ -39,13 +38,13 @@ class TestGitlabProvider(unittest.TestCase):
                     pass
 
     def tearDown(self):
-        for channel in self.channels:
+        # for channel in self.channels:
 
-            for member in channel['members']:
-                try:
-                    GitlabProvider.removeMember(channel['slug'], member)
-                except:
-                    pass
+        #     for member in channel['members']:
+        #         try:
+        #             GitlabProvider.removeMember(channel['slug'], member)
+        #         except:
+        #             pass
         db.session.remove()
         db.drop_all()
 
@@ -94,7 +93,7 @@ class TestGitlabProvider(unittest.TestCase):
         self.assertLess(len(moreMembers), len(newMembers))
 
     def testCreateIssue(self):
-        """Calling createTicket"""
+        """Calling createTicket should create a ticket, Calling removeTicket should remove it"""
         c = ChannelRepository.get('fablabs-approval')
         ticket = GitlabProvider.createTicket(
             c.path, self.bot.id, self.friend.id,
@@ -102,8 +101,8 @@ class TestGitlabProvider(unittest.TestCase):
             "More than you want to know ever about this lab")
         self.assertIsNotNone(ticket)
         self.assertIsNotNone(ticket.id)
+        self.assertIsNotNone(ticket.iid)
         self.assertEquals(ticket.title, "[NEW LAB] This lab was submitted")
-        found = False
         tickets = GitlabProvider.getTickets(c.path)
         self.assertGreater(
             len([aticket for aticket in tickets if aticket.id == ticket.id]), 0)
@@ -113,3 +112,61 @@ class TestGitlabProvider(unittest.TestCase):
         tickets = GitlabProvider.getTickets(c.path)
         self.assertEqual(
             len([aticket for aticket in tickets if aticket.id == ticket.id]), 0)
+
+    def testCommentIssue(self):
+        """calling createTicketDiscussion creates a comment in the issue"""
+        c = ChannelRepository.get('fablabs-approval')
+        ticket = GitlabProvider.createTicket(
+            c.path, self.bot.id, self.friend.id,
+            "[NEW LAB] This a test issue as the lab was submitted",
+            "More than you want to know ever about this lab")
+
+        discussion = GitlabProvider.createTicketDiscussion(
+            c.path, ticket.iid, self.bot.id, "Some comment to this awesome issue")
+
+        # import pdb
+        # pdb.set_trace()
+
+        self.assertIsNotNone(discussion)
+        self.assertIsNotNone(discussion.attributes["notes"][0])
+        note = discussion.attributes["notes"][0]
+        self.assertEquals(note["body"],  "Some comment to this awesome issue")
+        self.assertEquals(note["author"]["id"], self.bot.id)
+
+        discussions = [
+            discussion for discussion in ticket.discussions.list(all=True)]
+        self.assertEquals(len(discussions), 1)
+        # except:
+        #     pass
+        GitlabProvider.removeTicket(
+            c.path, ticket.iid
+        )
+
+    def testReplyIssue(self):
+        """calling addTicketDiscussion creates a reply to a comment in the issue"""
+        c = ChannelRepository.get('fablabs-approval')
+        ticket = GitlabProvider.createTicket(
+            c.path, self.bot.id, self.friend.id,
+            "[NEW LAB] This a test issue as the lab was submitted",
+            "More than you want to know ever about this lab")
+
+        discussion = GitlabProvider.createTicketDiscussion(
+            c.path, ticket.iid, self.bot.id, "Some comment to this awesome issue")
+
+        note = GitlabProvider.addTicketDiscussion(
+            c.path, ticket.iid, discussion.id, self.friend.id, "Some reply")
+
+        self.assertIsNotNone(note)
+        self.assertIsNotNone(note.attributes["body"])
+
+        GitlabProvider.removeTicket(
+            c.path, ticket.iid
+        )
+
+    def testSubscribe(self):
+        """calling subscribeTicket adds the user to the issue watchers"""
+        pass
+
+    def testUnsubscribe(self):
+        """calling unsubscribeTicket removes the user from the issue watchers"""
+        pass
