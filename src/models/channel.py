@@ -18,5 +18,3 @@ class Channel(db.Model, BaseModel, metaclass=MetaBaseModel):
         self.slug = slug
         self.title = title
         self.path = path
-
-

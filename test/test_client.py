@@ -1,8 +1,8 @@
 import unittest
-import yaml
+
 from server import server
 from models.abc import db
-import os
+from models import Client
 import pytest
 from repositories import ClientRepository
 
@@ -21,6 +21,11 @@ class TestClient(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+
+    def testModel(self):
+        client = ClientRepository.create("test", "Test")
+        self.assertIsNotNone(client.client_id)
+        self.assertIsNotNone(client.client_secret)
 
     def testGet(self):
         """ GET on /api/client should return an API client """

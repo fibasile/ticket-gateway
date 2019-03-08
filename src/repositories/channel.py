@@ -1,5 +1,4 @@
 from models import Channel
-from util import ApiError
 from sqlalchemy.orm import exc
 from werkzeug.exceptions import abort
 

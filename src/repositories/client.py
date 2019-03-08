@@ -18,6 +18,17 @@ class ClientRepository:
             abort(404)
 
     @staticmethod
+    def getById(client_id, client_secret):
+        """ Query a channel by client_id and client_secret """
+        try:
+            return Client.query.filter_by(
+                client_id=client_id,
+                client_secret=client_secret,
+            ).one()
+        except exc.NoResultFound:
+            abort(404)
+
+    @staticmethod
     def create(slug, title, ):
         """ Create a new client """
         client = Client(slug, title)
