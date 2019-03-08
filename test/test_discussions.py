@@ -28,9 +28,10 @@ class TestDiscussions(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-        GitlabProvider.getTicket = TestDiscussions._getTicket
-        GitlabProvider.addTicketDiscussion = TestDiscussions._addTicketDiscussion
-        GitlabProvider.createTicketDiscussion = TestDiscussions._createTicketDiscussion
+        cls = TestDiscussions
+        GitlabProvider.getTicket = cls._getTicket
+        GitlabProvider.addTicketDiscussion = cls._addTicketDiscussion
+        GitlabProvider.createTicketDiscussion = cls._createTicketDiscussion
 
     def test_get(self):
         """The GET on `/api/channel/a-channel/tickets/ticket_id/discussions`"""

@@ -3,9 +3,9 @@ import json
 
 from server import server
 from models.abc import db
-from models import Channel
+
 from repositories import ChannelRepository, GitlabProvider
-from unittest.mock import MagicMock, Mock
+from unittest.mock import MagicMock
 
 
 class TestTickets(unittest.TestCase):
@@ -38,7 +38,8 @@ class TestTickets(unittest.TestCase):
         GitlabProvider.getTicket = TestTickets._getTickets
 
     def test_get(self):
-        """ The GET on `/application/channel/tickets` should return a list of tickets for the channel """
+        """ The GET on `/application/channel/tickets` should return """
+        """ a list of tickets for the channel """
         response = self.client.get('/api/channel/a-channel/tickets')
         self.assertEqual(response.status_code, 200)
         GitlabProvider.getTracker.assert_called_with('/dummy/path')

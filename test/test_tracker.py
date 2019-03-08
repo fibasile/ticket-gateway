@@ -3,9 +3,8 @@ import json
 
 from server import server
 from models.abc import db
-from models import Channel
 from repositories import ChannelRepository, GitlabProvider
-from unittest.mock import MagicMock, Mock
+from unittest.mock import MagicMock
 
 
 class TestTracker(unittest.TestCase):

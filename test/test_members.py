@@ -36,7 +36,8 @@ class TestMembers(unittest.TestCase):
         GitlabProvider.getMembers = TestMembers._getMembers
 
     def test_get(self):
-        """ The GET on `/api/channel/a-channel/members` should return a list of members """
+        """ The GET on `/api/channel/a-channel/members` should """
+        """ return a list of members """
         response = self.client.get('/api/channel/a-channel/members')
         self.assertEqual(response.status_code, 200)
         GitlabProvider.getMembers.assert_called_with('/dummy/path')
@@ -47,7 +48,8 @@ class TestMembers(unittest.TestCase):
         )
 
     def test_post(self):
-        """ The POST on `/api/channel/a-channel/members` adds a member with valid params"""
+        """ The POST on `/api/channel/a-channel/members` """
+        """adds a member with valid params"""
         GitlabProvider.addMember = MagicMock(name="addMember")
 
         GitlabProvider.addMember.return_value = [{

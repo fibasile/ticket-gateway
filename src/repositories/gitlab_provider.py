@@ -71,7 +71,8 @@ class GitlabProvider(TicketProvider):
         return issue.notes.list(all=True)
 
     @classmethod
-    def addTicketDiscussion(cls, project_path, ticket_id,  discussion_id,  user_id, body):
+    def addTicketDiscussion(cls, project_path, ticket_id,
+                            discussion_id,  user_id, body):
         """ Add a new comment to the ticket """
         tracker = cls.getTracker(project_path, user_id)
         issue = tracker.issues.get(ticket_id)

@@ -2,13 +2,14 @@ import unittest
 import yaml
 from server import server
 from models.abc import db
-from repositories import ChannelRepository, GitlabProvider
+from repositories import ChannelRepository
 # from unittest.mock import MagicMock, Mock
 from repositories import GitlabProvider, gitClient
 import os
 # from importlib import reload
 # uncomment below to run the git test
-# this will work if you create two users and the projects in the fixtures/channels.yml
+# this will work if you create two users and the
+# projects in the fixtures/channels.yml
 # users:
 # ticketbot
 # ticketfriend
@@ -25,11 +26,12 @@ class TestGitlabProvider(unittest.TestCase):
         db.create_all()
         self.bot = GitlabProvider.getUserByUsername('ticketbot')
         self.friend = GitlabProvider.getUserByUsername('ticketfriend')
-        with open(os.path.join(os.getcwd(), 'test/fixtures/channels.yml'), 'r') as fixture:
+        with open(os.path.join(
+                os.getcwd(), 'test/fixtures/channels.yml'), 'r') as fixture:
             data = yaml.load(fixture)
             self.channels = data['channels']
         for channel in self.channels:
-            c = ChannelRepository.create(
+            ChannelRepository.create(
                 channel['slug'], channel['title'], channel['path'])
             for member in channel['members']:
                 try:
@@ -73,7 +75,7 @@ class TestGitlabProvider(unittest.TestCase):
 
     def testGetUser(self):
         """Calling getUser returns an existing user"""
-        c = ChannelRepository.get('fablabs-approval')
+        ChannelRepository.get('fablabs-approval')
         member = GitlabProvider.getUserByUsername('tickettester')
         self.assertIsNotNone(member)
         self.assertEquals(member.username, "tickettester")
@@ -81,7 +83,8 @@ class TestGitlabProvider(unittest.TestCase):
             GitlabProvider.getUserByUsername('abubububub')
 
     def testAddRemoveUser(self):
-        """Calling  addMember adds a new member, and calling removeMember removes it"""
+        """Calling  addMember adds a new member,"""
+        """and calling removeMember removes it"""
         c = ChannelRepository.get('fablabs-approval')
         member = GitlabProvider.getUserByUsername('tickettester')
         oldMembers = GitlabProvider.getMembers(c.path)
@@ -93,7 +96,8 @@ class TestGitlabProvider(unittest.TestCase):
         self.assertLess(len(moreMembers), len(newMembers))
 
     def testCreateIssue(self):
-        """Calling createTicket should create a ticket, Calling removeTicket should remove it"""
+        """Calling createTicket should create a ticket,"""
+        """Calling removeTicket should remove it"""
         c = ChannelRepository.get('fablabs-approval')
         ticket = GitlabProvider.createTicket(
             c.path, self.bot.id, self.friend.id,
@@ -104,14 +108,12 @@ class TestGitlabProvider(unittest.TestCase):
         self.assertIsNotNone(ticket.iid)
         self.assertEquals(ticket.title, "[NEW LAB] This lab was submitted")
         tickets = GitlabProvider.getTickets(c.path)
-        self.assertGreater(
-            len([aticket for aticket in tickets if aticket.id == ticket.id]), 0)
-        GitlabProvider.removeTicket(
-            c.path, ticket.iid
-        )
+        match = [aticket for aticket in tickets if aticket.id == ticket.id]
+        self.assertGreater(len(match), 0)
+        GitlabProvider.removeTicket(c.path, ticket.iid)
         tickets = GitlabProvider.getTickets(c.path)
-        self.assertEqual(
-            len([aticket for aticket in tickets if aticket.id == ticket.id]), 0)
+        match = [aticket for aticket in tickets if aticket.id == ticket.id]
+        self.assertEqual(len(match), 0)
 
     def testCommentIssue(self):
         """calling createTicketDiscussion creates a comment in the issue"""
@@ -122,7 +124,8 @@ class TestGitlabProvider(unittest.TestCase):
             "More than you want to know ever about this lab")
 
         discussion = GitlabProvider.createTicketDiscussion(
-            c.path, ticket.iid, self.bot.id, "Some comment to this awesome issue")
+            c.path, ticket.iid, self.bot.id,
+            "Some comment to this awesome issue")
 
         # import pdb
         # pdb.set_trace()
@@ -143,18 +146,28 @@ class TestGitlabProvider(unittest.TestCase):
         )
 
     def testReplyIssue(self):
-        """calling addTicketDiscussion creates a reply to a comment in the issue"""
+        """calling addTicketDiscussion creates a reply """
+        """to a comment in the issue"""
         c = ChannelRepository.get('fablabs-approval')
         ticket = GitlabProvider.createTicket(
-            c.path, self.bot.id, self.friend.id,
+            c.path,
+            self.bot.id,
+            self.friend.id,
             "[NEW LAB] This a test issue as the lab was submitted",
             "More than you want to know ever about this lab")
 
         discussion = GitlabProvider.createTicketDiscussion(
-            c.path, ticket.iid, self.bot.id, "Some comment to this awesome issue")
+            c.path,
+            ticket.iid,
+            self.bot.id,
+            "Some comment to this awesome issue")
 
         note = GitlabProvider.addTicketDiscussion(
-            c.path, ticket.iid, discussion.id, self.friend.id, "Some reply")
+            c.path,
+            ticket.iid,
+            discussion.id,
+            self.friend.id,
+            "Some reply")
 
         self.assertIsNotNone(note)
         self.assertIsNotNone(note.attributes["body"])
@@ -168,7 +181,8 @@ class TestGitlabProvider(unittest.TestCase):
         pass
 
     def testUnsubscribe(self):
-        """calling unsubscribeTicket removes the user from the issue watchers"""
+        """calling unsubscribeTicket removes the """
+        """user from the issue watchers"""
         pass
 
     def testGetUserById(self):
