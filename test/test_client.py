@@ -5,6 +5,7 @@ from models.abc import db
 from models import Client
 import pytest
 from repositories import ClientRepository
+from util import test_client
 
 
 @pytest.mark.current
@@ -13,7 +14,7 @@ class TestClient(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.client = server.test_client()
+        cls.client = test_client(server)
 
     def setUp(self):
         db.create_all()

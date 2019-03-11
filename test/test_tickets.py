@@ -7,12 +7,14 @@ from models.abc import db
 from repositories import ChannelRepository, GitlabProvider
 from unittest.mock import MagicMock
 
+from util import test_client
+
 
 class TestTickets(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.client = server.test_client()
+        cls.client = test_client(server)
         cls._getTracker = GitlabProvider.getTracker
         cls._getTickets = GitlabProvider.getTickets
 

@@ -8,11 +8,13 @@ from flask_restful.reqparse import Argument
 from flask.json import jsonify
 from repositories import ClientRepository
 from util import parse_params
+from flask_jwt_extended import jwt_required
 
 
 class ClientResource(Resource):
     """ Verbs relative to the clients """
     @staticmethod
+    @jwt_required
     @swag_from('../swagger/client/GET.yml')
     def get(slug):
         """ Return a client key information based on his slug """
@@ -20,6 +22,7 @@ class ClientResource(Resource):
         return jsonify({'data': channel.json})
 
     @staticmethod
+    @jwt_required
     @parse_params(
         Argument(
             'title',

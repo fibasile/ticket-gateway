@@ -12,12 +12,14 @@ from repositories import GitlabProvider
 from util import parse_params
 from util import ApiError
 # from flask import current_app as app
+from flask_jwt_extended import jwt_required
 
 
 class DiscussionsResource(Resource):
     """ Verbs relative to the discussions """
 
     @staticmethod
+    @jwt_required
     @swag_from('../swagger/discussions/GET.yml')
     def get(slug, ticket_id):
         """ Return an channel key information based on his slug """
@@ -28,6 +30,7 @@ class DiscussionsResource(Resource):
         return jsonify(dict({"data": discussions}))
 
     @staticmethod
+    @jwt_required
     @swag_from('../swagger/members/POST.yml')
     @parse_params(
         Argument(

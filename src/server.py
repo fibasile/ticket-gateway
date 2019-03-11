@@ -8,7 +8,7 @@ from models import db
 import routes
 
 from flask_jwt_extended import JWTManager
-
+from util import test_client
 
 # config your API specs
 # you can define multiple specs in the case your api has multiple versions
@@ -18,7 +18,7 @@ from flask_jwt_extended import JWTManager
 
 server = Flask(__name__)
 CORS(server)
-
+server.config['PROPAGATE_EXCEPTIONS'] = True
 server.config['SWAGGER'] = {
     "swagger_version": "2.0",
     "title": "Application",

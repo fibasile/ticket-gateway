@@ -10,11 +10,13 @@ from repositories import ChannelRepository
 from repositories import GitlabProvider
 from util import parse_params
 from util import ApiError
+from flask_jwt_extended import jwt_required
 
 
 class MembersResource(Resource):
     """ Verbs relative to the users """
     @staticmethod
+    @jwt_required
     @swag_from('../swagger/members/GET.yml')
     def get(slug):
         """ Return an channel key information based on his slug """
@@ -23,6 +25,7 @@ class MembersResource(Resource):
         return jsonify({"data": members})
 
     @staticmethod
+    @jwt_required
     @swag_from('../swagger/members/POST.yml')
     @parse_params(
         Argument(

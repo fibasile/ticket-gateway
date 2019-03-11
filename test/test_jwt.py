@@ -24,7 +24,10 @@ class TestJWT(unittest.TestCase):
     def testLoginNotFound(self):
         """the POST on /api/authorize with invalid credentials should error"""
         response = self.client.post(
-            '/api/authorize', json={"client_id": "dafdasf", "client_secret": "dafadsfasdf"})
+            '/api/authorize', json={
+                "client_id": "dafdasf",
+                "client_secret": "dafadsfasdf"
+            })
         self.assertEqual(response.status_code, 404)
 
     def testLoginSuccess(self):

@@ -2,13 +2,14 @@ import unittest
 from models.abc import db
 from server import server
 from repositories import ChannelRepository
+from util import test_client
 
 
 class TestCors(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.client = server.test_client()
+        cls.client = test_client(server)
 
     def setUp(self):
         db.create_all()

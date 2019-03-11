@@ -4,13 +4,14 @@ from server import server
 from models.abc import db
 from repositories import ChannelRepository, GitlabProvider
 from unittest.mock import MagicMock, Mock
+from util import test_client
 
 
 class TestMembers(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.client = server.test_client()
+        cls.client = test_client(server)
         cls._getTracker = GitlabProvider.getTracker
         cls._getMembers = GitlabProvider.getMembers
 

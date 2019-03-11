@@ -3,13 +3,15 @@ import json
 from server import server
 from models.abc import db
 from repositories import ChannelRepository
+from JWTTest import JWTTestCase
+from util import test_client
 
 
 class TestChannel(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.client = server.test_client()
+        cls.client = test_client(server)
 
     def setUp(self):
         db.create_all()

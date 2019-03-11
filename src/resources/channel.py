@@ -8,18 +8,21 @@ from flask_restful.reqparse import Argument
 from flask.json import jsonify
 from repositories import ChannelRepository
 from util import parse_params
+from flask_jwt_extended import jwt_required
 
 
 class ChannelResource(Resource):
     """ Verbs relative to the users """
     @staticmethod
+    @jwt_required
     @swag_from('../swagger/channel/GET.yml')
     def get(slug):
-        """ Return an channel key information based on his slug """        
+        """ Return an channel key information based on his slug """
         channel = ChannelRepository.get(slug=slug)
         return jsonify({'data': channel.json})
 
     @staticmethod
+    @jwt_required
     @parse_params(
 
         Argument(
@@ -46,5 +49,3 @@ class ChannelResource(Resource):
         r = jsonify({'data': channel.json})
         r.status_code = 201
         return r
-
- 

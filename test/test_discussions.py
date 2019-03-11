@@ -7,12 +7,14 @@ from unittest.mock import MagicMock, Mock
 # from flask import make_response
 # from flask.json import jsonify
 
+from util import test_client
+
 
 class TestDiscussions(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.client = server.test_client()
+        cls.client = test_client(server)
         cls._getTicket = GitlabProvider.getTicket
         cls._addTicketDiscussion = GitlabProvider.addTicketDiscussion
         cls._createTicketDiscussion = GitlabProvider.createTicketDiscussion
